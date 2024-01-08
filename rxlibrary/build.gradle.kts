@@ -32,33 +32,25 @@ android {
             jniLibs.srcDir("libs")
         }
     }
+    packagingOptions {
+        excludes += "**/R.class"
+        excludes += "**/BuildConfig.class"
+    }
 }
 
 dependencies {
     implementation(files("libs/androidnet.jar"))
 }
 
-// Because the components are created only during the afterEvaluate phase, you must
-// configure your publications using the afterEvaluate() lifecycle method.
 afterEvaluate {
     publishing {
         publications {
-            // Creates a Maven publication called "release".
             create<MavenPublication>("release") {
-                // Applies the component for the release build variant.
                 from(components["release"])
                 groupId = "io.github.bluesky15171"
                 artifactId = "rixiang"
                 version = "2.1.0"
             }
-           // // Creates a Maven publication called “debug”.
-           // create<MavenPublication>("debug") {
-           //     // Applies the component for the debug build variant.
-           //     from(components["debug"])
-           //     groupId = "io.github.bluesky15171"
-           //     artifactId = "rixiang-debug"
-           //     version = "2.1.0"
-           // }
         }
     }
 }
