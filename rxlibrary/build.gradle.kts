@@ -1,9 +1,6 @@
 plugins {
     id("com.android.library")
-//    id("com.novoda.bintray-release")
-    id("com.github.panpf.bintray-publish")
-//    `maven-publish`
-//    `signing`
+    `maven-publish`
 }
 android {
     namespace = "com.itskylin.devices.rixiang"
@@ -11,6 +8,7 @@ android {
 
     defaultConfig {
         minSdk = 8
+        //noinspection ExpiredTargetSdkVersion
         targetSdk = 22
     }
     buildTypes {
@@ -25,36 +23,42 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-//    // 生成jar包的配置如下：
-//    val JAR_PATH = "build/intermediates/runtime_library_classes_jar/release/" // 待打包文件的位置
-//    val JAR_NAME = "classes.jar" // 待打包文件的名字
-//    val DESTINATION_PATH = "libs" // 生成jar包的位置
-//    val NEW_NAME = "rxlibrary.jar" // 生成jar包的名字
-//
-//    tasks.register<Copy>("makeJar") {
-//        delete(DESTINATION_PATH + NEW_NAME)
-//        from(JAR_PATH + JAR_NAME)
-//        into(DESTINATION_PATH)
-//        rename(JAR_NAME, NEW_NAME)
-//    }
-
     lintOptions {
         isAbortOnError = false
     }
 
-//    makeJar.dependsOn(build)
+    sourceSets {
+        getByName("main") {
+            jniLibs.srcDir("libs")
+        }
+    }
 }
 
 dependencies {
     implementation(files("libs/androidnet.jar"))
 }
 
-configure<com.github.panpf.bintray.publish.PublishExtension> {
-//configure<com.novoda.gradle.release.PublishExtension> {
-    userOrg = "BlueSky15171"
-    groupId = "io.github.bluesky15171"
-    artifactId = "rixiang"
-    publishVersion = "2.1.0"
-    desc = "rixiang device api"
-    website = "https://github.com/BlueSky15171/Rixiang-library"
+// Because the components are created only during the afterEvaluate phase, you must
+// configure your publications using the afterEvaluate() lifecycle method.
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            create<MavenPublication>("release") {
+                // Applies the component for the release build variant.
+                from(components["release"])
+                groupId = "io.github.bluesky15171"
+                artifactId = "rixiang-library"
+                version = "2.1.0"
+            }
+            // Creates a Maven publication called “debug”.
+            create<MavenPublication>("debug") {
+                // Applies the component for the debug build variant.
+                from(components["debug"])
+                groupId = "io.github.bluesky15171"
+                artifactId = "rixiang-debug"
+                version = "2.1.0"
+            }
+        }
+    }
 }
