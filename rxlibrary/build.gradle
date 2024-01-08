@@ -1,0 +1,47 @@
+apply plugin: 'com.android.library'
+version = "1.0.2"
+android {
+    compileSdkVersion 22
+
+    defaultConfig {
+        minSdkVersion 8
+        targetSdkVersion 22
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    task javadoc(type: Javadoc) {
+        options.encoding "UTF-8"
+        options.charSet 'UTF-8'
+    }
+
+    // 生成jar包的配置如下：
+    def JAR_PATH = "build/intermediates/runtime_library_classes_jar/release/" // 待打包文件的位置
+    def JAR_NAME = "classes.jar" // 待打包文件的名字
+    def DESTINATION_PATH = "libs" // 生成jar包的位置
+    def NEW_NAME = "rxlibrary.jar" // 生成jar包的名字
+
+    task makeJar(type: Copy) {
+        delete DESTINATION_PATH + NEW_NAME
+        from(JAR_PATH + JAR_NAME)
+        into(DESTINATION_PATH)
+        rename(JAR_NAME, NEW_NAME)
+    }
+    namespace 'com.rixiangtek.rxlibrary'
+    lint {
+        abortOnError false
+    }
+
+    makeJar.dependsOn(build)
+}
+
+dependencies {
+    implementation files('libs/androidnet.jar')
+}
+
+// g7aRjg+s
+// EWP07qfoIQbVxUKnkyzvVoyZWZZ0OQgEVzQHb5clpz58
