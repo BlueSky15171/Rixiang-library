@@ -48,17 +48,17 @@ afterEvaluate {
                 // Applies the component for the release build variant.
                 from(components["release"])
                 groupId = "io.github.bluesky15171"
-                artifactId = "rixiang-library"
+                artifactId = "rixiang"
                 version = "2.1.0"
             }
-            // Creates a Maven publication called “debug”.
-            create<MavenPublication>("debug") {
-                // Applies the component for the debug build variant.
-                from(components["debug"])
-                groupId = "io.github.bluesky15171"
-                artifactId = "rixiang-debug"
-                version = "2.1.0"
-            }
+           // // Creates a Maven publication called “debug”.
+           // create<MavenPublication>("debug") {
+           //     // Applies the component for the debug build variant.
+           //     from(components["debug"])
+           //     groupId = "io.github.bluesky15171"
+           //     artifactId = "rixiang-debug"
+           //     version = "2.1.0"
+           // }
         }
     }
 }
