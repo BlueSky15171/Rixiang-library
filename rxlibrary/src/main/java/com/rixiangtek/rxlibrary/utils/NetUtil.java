@@ -73,20 +73,16 @@ public class NetUtil {
     }
 
     @SuppressLint("MissingPermission")
-    public int getNetwork(Context mContext) {
+    public int getNetwork(Context context) {
         isCheck = true;
         isConnect = false;
         WifiManager mWifiManager;
         ConnectivityManager mConnectivityManager;
         NetworkInfo ethernetNetInfo;
 
-
-        mWifiManager = (WifiManager) mContext
-                .getSystemService(Context.WIFI_SERVICE);//获得WifiManager对象
-        mConnectivityManager = (ConnectivityManager) mContext
-                .getSystemService(Context.CONNECTIVITY_SERVICE);//获得ConnectivityManager对象
-        ethernetNetInfo = mConnectivityManager
-                .getNetworkInfo(ConnectivityManager.TYPE_ETHERNET);//获得NetworkInfo对象
+        mWifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);//获得WifiManager对象
+        mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);//获得ConnectivityManager对象
+        ethernetNetInfo = mConnectivityManager.getNetworkInfo(ConnectivityManager.TYPE_ETHERNET);//获得NetworkInfo对象
 
 
         if (ethernetNetInfo.isConnected()) {
@@ -95,7 +91,7 @@ public class NetUtil {
 
         } else {
 
-            if (mWifiManager.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
+            if (WifiManager.WIFI_STATE_ENABLED == mWifiManager.getWifiState()) {
                 if (mWifiManager.getConnectionInfo().getIpAddress() == 0) {
                     valueWifi = -1;//如果无线网可用，值为-1
                     netconfigDetail = 6;//如果无线网不可用，值为6
@@ -130,14 +126,12 @@ public class NetUtil {
             mThread = null;
         }
         if (mThread == null || mThread.isInterrupted()) {
-            mThread = new Thread(new Runnable() {
-                public void run() {
-                    isCheck = true;
-                    isConnect = false;
-                    isConnect = isConnected();
-                    isCheck = false;
-                    isPppoeConnect = isConnect;
-                }
+            mThread = new Thread(() -> {
+                isCheck = true;
+                isConnect = false;
+                isConnect = isConnected();
+                isCheck = false;
+                isPppoeConnect = isConnect;
             });
             mThread.start();
         }
@@ -244,7 +238,7 @@ public class NetUtil {
                     }
                 }
             }
-        } catch (SocketException ex) {
+        } catch (SocketException ignored) {
 
         }
         return "0.0.0.0";
@@ -263,14 +257,14 @@ public class NetUtil {
          * check the subMask format
          */
         Pattern pattern = Pattern.compile("(^((\\d|[01]?\\d\\d|2[0-4]\\d|25[0-5])\\.){3}(\\d|[01]?\\d\\d|2[0-4]\\d|25[0-5])$)|^(\\d|[1-2]\\d|3[0-2])$");
-        if (pattern.matcher(maskStr).matches() == false) {
+        if (!pattern.matcher(maskStr).matches()) {
             Log.e("33333", "subMask is error");
             return 0;
         }
 
         String[] ipSegment = maskStr.split("\\.");
-        for (int n = 0; n < ipSegment.length; n++) {
-            sb = new StringBuffer(Integer.toBinaryString(Integer.parseInt(ipSegment[n])));
+        for (String s : ipSegment) {
+            sb = new StringBuffer(Integer.toBinaryString(Integer.parseInt(s)));
             str = sb.reverse().toString();
             count = 0;
             for (int i = 0; i < str.length(); i++) {

@@ -15,10 +15,9 @@ import java.lang.reflect.Method;
 
 public class SysUtil {
 
-
     //关机
     @SuppressLint("ObsoleteSdkInt")
-    public static  void shutdown(Context context) {
+    public static void shutdown(Context context) {
         if (Build.VERSION.SDK_INT > 25) {
             try {
                 Class<?> serviceManager = Class.forName("android.os.ServiceManager");
@@ -43,9 +42,11 @@ public class SysUtil {
     }
 
     // 重启
-    public static  void reboot(Context context) {
+    public static void reboot(Context context) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        pm.reboot("");
+        if (pm != null) {
+            pm.reboot("");
+        }
     }
 
 }

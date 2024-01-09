@@ -28,13 +28,11 @@ android {
     }
 
     sourceSets {
-        getByName("main") {
-            jniLibs.srcDir("libs")
-        }
+        getByName("main").jniLibs.srcDir("libs")
     }
     packagingOptions {
-        excludes += "**/R.class"
-        excludes += "**/BuildConfig.class"
+        resources.excludes += "**/R.class"
+        resources.excludes += "**/BuildConfig.class"
     }
 }
 

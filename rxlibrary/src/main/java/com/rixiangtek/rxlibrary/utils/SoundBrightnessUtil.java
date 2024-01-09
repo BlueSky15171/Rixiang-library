@@ -12,11 +12,9 @@ import android.media.AudioManager;
 
 public class SoundBrightnessUtil {
 
-    private static SoundBrightnessUtil instance = null;
+    private static volatile SoundBrightnessUtil instance = null;
 
-
-
-    public static SoundBrightnessUtil getInstance(){
+    public static SoundBrightnessUtil getInstance() {
         if (instance == null) {
             synchronized (SoundBrightnessUtil.class) {
                 if (instance == null) {
@@ -39,13 +37,16 @@ public class SoundBrightnessUtil {
         if (process > 15) {
             process = 15;
         }
-        mgr.setStreamVolume(AudioManager.STREAM_MUSIC, process, AudioManager.FLAG_PLAY_SOUND);
+        if (mgr != null) {
+            mgr.setStreamVolume(AudioManager.STREAM_MUSIC, process, AudioManager.FLAG_PLAY_SOUND);
+        }
     }
 
 
     /**
      * 设置亮度
-     * @param processIndex  0 ~ 255
+     *
+     * @param processIndex 0 ~ 255
      */
     public void setBrightNess(Context context, int processIndex) {
         if (processIndex > 255) {

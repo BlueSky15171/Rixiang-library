@@ -8,7 +8,6 @@ package com.rixiangtek.rxlibrary.contants;
  */
 public interface SwisConstants {
 
-
     /**
      * 亮屏
      */

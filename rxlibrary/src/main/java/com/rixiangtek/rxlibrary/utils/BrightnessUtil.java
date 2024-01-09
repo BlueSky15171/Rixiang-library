@@ -31,8 +31,8 @@ public class BrightnessUtil {
     /**
      * 获取屏幕的亮度
      *
-     * @param activity
-     * @return
+     * @param activity 当前activity
+     * @return 0~255
      */
     public static int getScreenBrightness(Activity activity) {
         int nowBrightnessValue = 0;
@@ -62,7 +62,7 @@ public class BrightnessUtil {
     /**
      * 停止自动亮度调节
      *
-     * @param activity
+     * @param activity 当前activity
      */
     public static void stopAutoBrightness(Activity activity) {
         Settings.System.putInt(activity.getContentResolver(),
@@ -74,7 +74,7 @@ public class BrightnessUtil {
      * 保存亮度设置状态
      *
      * @param resolver
-     * @param brightness
+     * @param brightness 亮度值 0-255
      */
     public static void setBrightness(ContentResolver resolver, int brightness) {
         try {
