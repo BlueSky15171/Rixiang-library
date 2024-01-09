@@ -3,6 +3,8 @@
 -keep class com.google.** { *; }
 -keep class dalvik.** { *; }
 -keep class libcore.** { *; }
+-keep class com.jni.** { *; }
+-keep class com.rixiangtek.** { *; }
 
 -dontwarn android.**
 -dontwarn com.android.**
